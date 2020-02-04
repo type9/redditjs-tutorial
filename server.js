@@ -1,11 +1,15 @@
 //Require
 const express = require('express');
+const bodyParser = require('body-parser');
+const expressValidator = require('express-validator');
+//db
+require('./data/reddit-db');
 //Setup
 const app = express();
 //MiddleWare
 const hbs  = require('express-handlebars');
 
-//Express Config
+//EXPRESS CONFIG
 app.engine('handlebars', hbs({defaultLayout: 'main'}));
 app.engine( 'hbs', hbs( {
     extname: 'hbs',
@@ -15,9 +19,21 @@ app.engine( 'hbs', hbs( {
     partialsDir: __dirname + '/views/partials/'
 }));
 app.set('view engine', 'handlebars');
+//Body Parser
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+//Validator
+app.use(expressValidator());
+
+//Controllers
+require('./controllers/posts.js')(app);
 
 app.get('/', (req, res) => {
-    res.render('home')
+    res.render('home');
+})
+
+app.get('/posts/new', (req, res) => {
+    res.render('post/new');
 })
 
 app.listen(3000, () => {
