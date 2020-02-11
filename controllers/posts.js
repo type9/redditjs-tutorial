@@ -1,9 +1,16 @@
 const Post = require('../models/post');
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
 
 module.exports = (app) => {
-
+    //GET POSTS
+    app.get('/', (req, res) => {
+      Post.find({})
+            .then(posts => {
+              res.render("post-index", { posts });
+            })
+            .catch(err => {
+              console.log(err.message);
+            });
+    });
     // CREATE
     app.post('/posts/new', (req, res) => {
       // INSTANTIATE INSTANCE OF POST MODEL
@@ -12,6 +19,8 @@ module.exports = (app) => {
       // SAVE INSTANCE OF POST MODEL TO DB
       post.save((err, post) => {
         // REDIRECT TO THE ROOT
+        console.log(err)
+        console.log(post)
         return res.redirect(`/`);
       })
     });

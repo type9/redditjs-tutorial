@@ -28,10 +28,6 @@ app.use(expressValidator());
 //Controllers
 require('./controllers/posts.js')(app);
 
-app.get('/', (req, res) => {
-    res.render('home');
-})
-
 app.get('/posts/new', (req, res) => {
     res.render('post/new');
 })
@@ -39,3 +35,5 @@ app.get('/posts/new', (req, res) => {
 app.listen(3000, () => {
     console.log('Reddit.js listening on port localhost:3000!');
 });
+
+module.exports = app;
