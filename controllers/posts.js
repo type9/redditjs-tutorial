@@ -5,7 +5,7 @@ module.exports = (app) => {
     app.get('/', (req, res) => {
       Post.find({})
             .then(posts => {
-              res.render("post-index", { posts });
+              res.render("posts-index", { posts });
             })
             .catch(err => {
               console.log(err.message);
@@ -24,5 +24,23 @@ module.exports = (app) => {
         return res.redirect(`/`);
       })
     });
-  
+    //SUBREDDIT
+    app.get("/n/:subreddit", (req, res) => {
+      Post.find({ subreddit: req.params.subreddit })
+        .then(posts => {
+          res.render("posts-index", { posts });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    });
+    //SHOW ONE
+    app.get("/posts/:id", function(req, res) {
+      // LOOK UP THE POST
+      Post.findById(req.params.id).populate('comments').then((post) => {
+        res.render('post/show', { post })
+      }).catch((err) => {
+        console.log(err.message)
+      })
+    });
 };

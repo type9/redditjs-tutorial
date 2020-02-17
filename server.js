@@ -27,6 +27,7 @@ app.use(expressValidator());
 
 //Controllers
 require('./controllers/posts.js')(app);
+require('./controllers/comments.js')(app);
 
 app.get('/posts/new', (req, res) => {
     res.render('post/new');
