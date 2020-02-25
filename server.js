@@ -30,14 +30,25 @@ app.use(expressValidator());
 //JWT
 app.use(cookieParser()); // Add this after you initialize express.
 
+//Auth Check
+var checkAuth = (req, res, next) => {
+    console.log("Checking authentication");
+    if (typeof req.cookies.nToken === "undefined" || req.cookies.nToken === null) {
+      req.user = null;
+    } else {
+      var token = req.cookies.nToken;
+      var decodedToken = jwt.decode(token, { complete: true }) || {};
+      req.user = decodedToken.payload;
+    }
+  
+    next();
+  };
+app.use(checkAuth);
+
 //Controllers
 require('./controllers/auth.js')(app);
 require('./controllers/posts.js')(app);
 require('./controllers/comments.js')(app);
-
-app.get('/posts/new', (req, res) => {
-    res.render('post/new');
-})
 
 app.listen(3000, () => {
     console.log('Reddit.js listening on port localhost:3000!');
